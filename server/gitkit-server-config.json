@@ -1,0 +1,8 @@
+{
+  "clientId": "254764095884-3251gfh5o7nrqpakkonc0rlr91vmr77a.apps.googleusercontent.com",
+  "projectId": "coderbotsrv",
+  "serviceAccountEmail": "coderbotsrv-service@coderbotsrv.iam.gserviceaccount.com",
+  "serviceAccountPrivateKeyFile": "coderbotsrv-aa804133f2da.pem",
+  "widgetUrl": "/auth/logon",
+  "cookieName": "gtoken"
+}

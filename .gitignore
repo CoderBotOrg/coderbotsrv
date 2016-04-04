@@ -1,0 +1,8 @@
+.DS_STORE
+*.log
+*.pyc
+
+node_modules
+
+dist
+coverage

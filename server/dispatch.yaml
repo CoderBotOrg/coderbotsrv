@@ -1,0 +1,14 @@
+dispatch:
+  # Default module serves simple hostname request.
+
+  - url: "api.my.coderbot.org/*"
+    module: api
+
+  - url: "api.coderbot.org/*"
+    module: api
+
+  - url: "api.coderbot.org/coderbot/*"
+    module: api
+
+  - url: "my.coderbot.org/*"
+    module: default

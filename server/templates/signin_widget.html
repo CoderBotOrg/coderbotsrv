@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<!-- Copy and paste here the client configuration from Developer Console into the config variable -->
+
+<script type="text/javascript" src="//www.gstatic.com/authtoolkit/{{locale}}/js/gitkit.js"></script>
+<link type="text/css" rel="stylesheet" href="//www.gstatic.com/authtoolkit/{{locale}}/css/gitkit.css" />
+<script type="text/javascript">
+  var config = {
+  "widgetUrl": "http://{{host}}/auth/login",
+  "signInSuccessUrl": "/auth/callback",
+  "signOutUrl": "/auth/logout",
+  "oobActionUrl": "/auth/sendmail",
+  "apiKey": "AIzaSyD_HkO3RSmQ7tb9dyKfDxfWp3YBEG-0sKA",
+  "siteName": "this site",
+  "signInOptions": ["password","google","facebook","twitter","yahoo"],
+  "language": "{{locale}}"
+};
+  // The HTTP POST body should be escaped by the server to prevent XSS
+  window.google.identitytoolkit.start(
+      '#gitkitWidgetDiv', // accepts any CSS selector
+      config,
+      '{{ POST_BODY }}');
+</script>
+
+<!-- End modification -->
+
+</head>
+<body>
+
+<!-- Include the sign in page widget with the matching 'gitkitWidgetDiv' id -->
+<div id="gitkitWidgetDiv"></div>
+<!-- End identity toolkit widget -->
+
+</body></html>
