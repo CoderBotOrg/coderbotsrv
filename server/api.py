@@ -92,7 +92,7 @@ class BotHandler(BaseHandler):
     self.response.write( json.dumps(retval) )
 
 
-  def post(self):
+  def put(self, bot_uid):
     data = {}
     try:
       data = json.loads(self.request.body)
@@ -100,7 +100,7 @@ class BotHandler(BaseHandler):
       logging.error("invalid input: " + str(e))
 
     #search for existing Bot
-    bot = model.Bot.get_by_uid(data.get("bot_uid"))
+    bot = model.Bot.get_by_uid(bot_uid)
     if bot == None:
       logging.info("bot not present ")
       self.response.write( json.dumps({"status": "ko", "retcode": "bot_not_present"}) )
@@ -108,8 +108,12 @@ class BotHandler(BaseHandler):
 
     user_owner = User.get_by_email(data.get("user_email"))
 
-    bot.name = data.get("bot_name")
-    bot.version = data.get("bot_version")
+    if data.get("local_ip"):
+      bot.local_ip = data.get("local_ip")
+    if data.get("name"):
+      bot.name = data.get("name")
+    if data.get("version"):
+      bot.version = data.get("version")
     bot.put()
 
     retval = {"status": "ok", "retcode": "update_complete"}
@@ -215,12 +219,12 @@ class ProgramHandler(BaseHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/api/coderbot/v1.0/bot/new', NewBotHandler),
-    ('/api/coderbot/v1.0/bot/list', ListBotHandler),
-    ('/api/coderbot/v1.0/bot/(.*)', BotHandler),
-    ('/api/coderbot/v1.0/user/new', NewUserHandler),
-    ('/api/coderbot/v1.0/user/current', UserHandler),
-    ('/api/coderbot/v1.0/program/new', NewProgramHandler),
-    ('/api/coderbot/v1.0/program/list', ListProgramHandler),
-    ('/api/coderbot/v1.0/program/(.*)', ProgramHandler)
+    ('/api/coderbot/1.0/bot/new', NewBotHandler),
+    ('/api/coderbot/1.0/bot/list', ListBotHandler),
+    ('/api/coderbot/1.0/bot/(.*)', BotHandler),
+    ('/api/coderbot/1.0/user/new', NewUserHandler),
+    ('/api/coderbot/1.0/user/current', UserHandler),
+    ('/api/coderbot/1.0/program/new', NewProgramHandler),
+    ('/api/coderbot/1.0/program/list', ListProgramHandler),
+    ('/api/coderbot/1.0/program/(.*)', ProgramHandler)
 ], debug=True)

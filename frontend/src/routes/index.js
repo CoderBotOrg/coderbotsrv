@@ -10,6 +10,7 @@ import CoreLayout from 'layouts/CoreLayout/CoreLayout'
 import MainView from 'views/MainView'
 import BotView from 'views/BotView'
 import ProgramView from 'views/ProgramView'
+import LibraryView from 'views/LibraryView'
 
 export default (store) => (
   <Route path='/' component={CoreLayout}>
@@ -17,7 +18,7 @@ export default (store) => (
     <Route path='/' component={MainView} title='Home Page'>
       <Route path='/bots' component={BotView} title='Bot List'/>
       <Route path='/programs' component={ProgramView} title='Own Programs'/>
-      <Route path='/library' component={ProgramView} title='Public Programs'/>
+      <Route path='/library' component={LibraryView} title='Public Programs'/>
     </Route>
   </Route>
 )

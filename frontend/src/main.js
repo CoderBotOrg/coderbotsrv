@@ -6,7 +6,9 @@ import { browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import makeRoutes from './routes'
 import Root from './containers/Root'
+import PublicView from './views/PublicView'
 import configureStore from './redux/configureStore'
+import {CoderBotSrv} from './api/CoderBotSrv'
 
 // Configure history for react-router
 // const browserHistory = useRouterHistory(createBrowserHistory)({
@@ -30,7 +32,17 @@ const routes = makeRoutes(store)
 
 // Now that redux and react-router have been configured, we can render the
 // React application to the DOM!
-ReactDOM.render(
-  <Root history={history} routes={routes} store={store} />,
-  document.getElementById('root')
-)
+CoderBotSrv.getCurrentUser().then(function (user) {
+  console.log(user)
+  if (user) {
+    ReactDOM.render(
+      <Root history={history} routes={routes} store={store} />,
+      document.getElementById('root')
+    )
+  } else {
+    ReactDOM.render(
+      <PublicView history={history}/>,
+      document.getElementById('root')
+    )
+  }
+})
