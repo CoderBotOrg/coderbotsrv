@@ -6,6 +6,18 @@ export default React.createClass({
     children: React.PropTypes.array
   },
 
+  componentDidMount () {
+    window.google.identitytoolkit.signInButton(
+      '#gitkit', // accepts any CSS selector
+      {
+        widgetUrl: '/auth/login',
+        signOutUrl: '/auth/logout',
+        // Optional - Begin the sign-in flow in a popup window
+        popupMode: true
+      }
+    )
+  },
+
   render () {
     return (
       <nav className='navbar navbar-default navbar-fixed'>

@@ -7,6 +7,18 @@ export default React.createClass({
     children: PropTypes.array
   },
 
+  componentDidMount () {
+    window.google.identitytoolkit.signInButton(
+      '#gitkit', // accepts any CSS selector
+      {
+        widgetUrl: '/auth/login',
+        signOutUrl: '/auth/logout',
+        // Optional - Begin the sign-in flow in a popup window
+        popupMode: true
+      }
+    )
+  },
+
   render () {
     return (
       <div className='wrapper'>

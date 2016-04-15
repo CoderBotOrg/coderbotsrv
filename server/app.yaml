@@ -10,6 +10,7 @@ automatic_scaling:
 
 skip_files:
 - ^(.*/)?.*\.py[co]$
+- .DS_Store
 
 libraries:
 - name: webapp2

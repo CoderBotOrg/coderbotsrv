@@ -47,10 +47,10 @@ webpackConfig.output = {
 webpackConfig.plugins = [
   new webpack.DefinePlugin(config.globals),
   new HtmlWebpackPlugin({
-    template: '../server/templates/index.html', //paths.client('index.html'),
+    template: paths.client('index.html'),
     hash: false,
     favicon: '', //paths.client('static/favicon.ico'),
-    filename: '../templates/index_reacted.html',
+    filename: '../templates/index.html',
     inject: 'body',
     minify: {
       collapseWhitespace: true

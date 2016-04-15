@@ -47,7 +47,7 @@ class SignupHandler(BaseHandler):
 class MainHandler(BaseHandler):
   def get(self):
     template_values = {
-      'main': 'index_reacted.html',
+      'main': 'index.html',
       'content': "user: " + self.get_current_user().email if self.get_current_user() else "not logged"
     }
     self.get_base(template_values)
