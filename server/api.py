@@ -140,7 +140,6 @@ class NewUserHandler(BaseHandler):
     user.first_name = data.get("first_name")
     user.last_name = data.get("last_name")
     user.avatar_url = data.get("avatar_url")
-    user.avatar_url = data.get("avatar_url")
     user.status = model.User.ACTIVE # 1 = registered
     user.put()
 
@@ -204,6 +203,19 @@ class ListProgramHandler(BaseHandler):
     retval = {"status": "ok", "program_list": program_list}
     self.response.write( json.dumps(retval) )
 
+  @cors_enabled
+  @api_user_required
+  def post(self):
+    data = json.loads(self.request.body)
+    tags = data.get("tags", [])
+    programs = model.Program.get_by_tag(tags)
+    program_list = []
+    for program in programs:
+      program_list.append(program.as_dict())
+
+    retval = {"status": "ok", "program_list": program_list}
+    self.response.write( json.dumps(retval) )
+
 class ProgramHandler(BaseHandler):
   def post(self, prog_id):
     data = {}
@@ -219,12 +231,12 @@ class ProgramHandler(BaseHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/api/coderbot/1.0/bot/new', NewBotHandler),
+    ('/api/coderbot/1.0/bot', NewBotHandler),
     ('/api/coderbot/1.0/bot/list', ListBotHandler),
     ('/api/coderbot/1.0/bot/(.*)', BotHandler),
     ('/api/coderbot/1.0/user/new', NewUserHandler),
     ('/api/coderbot/1.0/user/current', UserHandler),
-    ('/api/coderbot/1.0/program/new', NewProgramHandler),
+    ('/api/coderbot/1.0/program', NewProgramHandler),
     ('/api/coderbot/1.0/program/list', ListProgramHandler),
     ('/api/coderbot/1.0/program/(.*)', ProgramHandler)
 ], debug=True)

@@ -120,10 +120,18 @@ class Program(model.Model):
 
   author = model.KeyProperty()
 
+  parent = model.KeyProperty()
+
   c_d = model.DateTimeProperty(auto_now_add=True)
   c_u = model.KeyProperty(kind=models.User)
   m_d = model.DateTimeProperty(auto_now=True)
   m_u = model.KeyProperty(kind=models.User)
+
+  tags = model.StringProperty(repeated=True)
+
+  STATUS_PRIVATE=1
+  STATUS_DELETED=99
+  STATUS_PUBLIC=10
 
   status = model.IntegerProperty()
 
