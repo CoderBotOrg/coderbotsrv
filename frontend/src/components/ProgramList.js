@@ -1,6 +1,7 @@
 /* @flow */
 import React from 'react'
 import Program from '../components/Program'
+import {CoderBotSrv} from '../api/CoderBotSrv'
 
 // We can use Flow (http://flowtype.org/) to type our component's props
 // and state. For convenience we've included both regular propTypes and
@@ -21,16 +22,12 @@ export default React.createClass({
   },
 
   componentDidMount () {
-    this.serverRequest = $.get('/api/coderbot/v1.0/program/list', function (data) {
-      console.log(data.program_list)
+    CoderBotSrv.getPrivateProgramList().then(function (program_list) {
+      // console.log(program_list)
       this.setState({
-        programs: data.program_list
+        programs: program_list
       })
     }.bind(this), 'json')
-  },
-
-  componentWillUnmount () {
-    this.serverRequest.abort()
   },
 
   render () {
@@ -42,8 +39,8 @@ export default React.createClass({
               return (
                 <Program key={program.uid}
                   programName={program.name}
-                  programUrl={program.url}
-                  programImage={program.image_url}/>)
+                  programId={program.uid}
+                  programImage='/static/img/coderbot_logo_128.png'/>)
             })
           }
           </div>

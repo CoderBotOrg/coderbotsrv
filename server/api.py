@@ -25,7 +25,7 @@ import model
 # Import the helper functions
 from identitytoolkit import gitkitclient
 
-from base import BaseHandler, api_user_required, api_user_gtk_required, cors_enabled
+from base import BaseHandler, api_user_required, api_bot_required, api_user_gtk_required, cors_enabled
 
 class NewBotHandler(BaseHandler):
 
@@ -195,12 +195,13 @@ class ListProgramHandler(BaseHandler):
   @cors_enabled
   @api_user_required
   def get(self):
-    programs = model.Program.get_by_author(self.get_current_user())
+    programs = model.Program.find_by_author(self.get_current_user())
     program_list = []
     for program in programs:
       program_list.append(program.as_dict())
 
     retval = {"status": "ok", "program_list": program_list}
+    logging.info(str(retval))
     self.response.write( json.dumps(retval) )
 
   @cors_enabled
@@ -208,7 +209,8 @@ class ListProgramHandler(BaseHandler):
   def post(self):
     data = json.loads(self.request.body)
     tags = data.get("tags", [])
-    programs = model.Program.get_by_tag(tags)
+    status = data.get("status", model.Program.STATUS_PRIVATE)
+    programs = model.Program.find_by_tag_status(tags, status)
     program_list = []
     for program in programs:
       program_list.append(program.as_dict())
@@ -217,16 +219,31 @@ class ListProgramHandler(BaseHandler):
     self.response.write( json.dumps(retval) )
 
 class ProgramHandler(BaseHandler):
+
+  @cors_enabled
+  @api_bot_required
   def post(self, prog_id):
-    data = {}
+    data = json.loads(self.request.body)
+    if data.get("prog_id"):
+      #update existing
+      program = model.Program.get_by_id(data.get("prog_id"))
+    else:
+      #create new
+      program = model.Program()
+
+    program.from_dict(data)
+    program.put()
+
     retval = {"status": "ok", "retcode": "program_created"}
     self.response.write( json.dumps(retval) )
 
   def get(self, prog_id):
-    program = model.key("Program", prog_id).get()
-    if program == None:
-      return
-    retval = {"status": "ok", "prog_data": program.as_dict()}
+    retval = {}
+    try:
+      program = model.Program.get_by_id(int(prog_id))
+      retval = {"status": "ok", "program_data": program.as_dict()}
+    except:
+      retval = {"status": "ko", "retcode": "program_not_found"}
     self.response.write( json.dumps(retval) )
 
 

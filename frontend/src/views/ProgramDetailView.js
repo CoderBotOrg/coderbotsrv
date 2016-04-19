@@ -1,22 +1,25 @@
 /* @flow */
 import React, { PropTypes } from 'react'
-import ProgramList from '../components/ProgramList'
+import ProgramDetail from '../components/ProgramDetail'
 import {setTitle} from '../components/Title'
 
 export default React.createClass({
   propTypes: {
-    route: PropTypes.array,
+    programId: PropTypes.object,
+    route: PropTypes.string,
+    params: PropTypes.object,
     children: PropTypes.array
   },
 
   componentDidMount () {
     setTitle(this.props.route.title)
+    console.log(this.props.params.programId)
   },
 
   render () {
     return (
       <div>
-        <ProgramList/>
+        <ProgramDetail {...this.props}/>
       </div>
     )
   }

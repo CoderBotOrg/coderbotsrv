@@ -18,6 +18,7 @@
 
 import logging
 import fpformat
+import datetime
 
 from google.appengine.ext.ndb import model, Cursor, Future, tasklet
 from google.appengine.ext import blobstore
@@ -54,8 +55,11 @@ class User(model.Model):
             "status": self.status};
 
   @classmethod
+  def get_by_id(cls, user_id):
+    return model.Key("User", user_id).get()
+
+  @classmethod
   def get_by_uid(cls, uid):
-    logging.info(uid)
     return cls.query().filter(cls.uid==str(uid)).get()
 
   @classmethod
@@ -103,8 +107,6 @@ class Project(model.Model):
   name = model.StringProperty()
   desc = model.TextProperty()
 
-  author = model.KeyProperty()
-
   c_d = model.DateTimeProperty(auto_now_add=True)
   c_u = model.KeyProperty(kind=models.User)
   m_d = model.DateTimeProperty(auto_now=True)
@@ -118,8 +120,6 @@ class Program(model.Model):
   name = model.StringProperty()
   code = model.TextProperty()
 
-  author = model.KeyProperty()
-
   parent = model.KeyProperty()
 
   c_d = model.DateTimeProperty(auto_now_add=True)
@@ -130,15 +130,45 @@ class Program(model.Model):
   tags = model.StringProperty(repeated=True)
 
   STATUS_PRIVATE=1
-  STATUS_DELETED=99
   STATUS_PUBLIC=10
+  STATUS_DELETED=99
 
   status = model.IntegerProperty()
 
   def as_dict(self):
-    return { "uid": str(self.key.id),
+    return { "uid": str(self.key.id()),
              "name": self.name,
-             "image_url": "/static/img/coderbot_logo_128.png"}
+             "code": self.code,
+             "tags": self.tags,
+             "c_u": self.c_u.get().as_dict(),
+             "c_d": datetime.datetime.strftime(self.c_d, "%Y%m%d%H%M%S"),
+             "m_u": self.m_u.get().as_dict(),
+             "m_d": datetime.datetime.strftime(self.m_d, "%Y%m%d%H%M%S"),
+             "status": self.status }
+
+  def from_dict(self, data):
+    self.name = data["name"]
+    self.code = data["code"]
+    self.tags = []
+    self.tags = data["tags"]
+    #for t in data["tags"]:
+    #  self.tags = t
+    self.status = data["status"]
+    if self.c_u is None:
+      self.c_u = User.get_by_id(int(data["c_u"]["uid"])).key
+    self.c_d = datetime.datetime.strptime(data["c_d"], "%Y%m%d%H%M%S")
+    if self.m_u is None:
+      self.m_u = User.get_by_id(int(data["m_u"]["uid"])).key
+    self.m_d = datetime.datetime.strptime(data["m_d"], "%Y%m%d%H%M%S")
+
   @classmethod
-  def get_by_author(cls, user):
-    return cls.query().filter(cls.author==user.key)
+  def get_by_id(cls, id):
+    return model.Key("Program", id).get()
+
+  @classmethod
+  def find_by_author(cls, user, status=STATUS_PRIVATE):
+    return cls.query().filter(cls.c_u==user.key).filter(cls.status==status)
+
+  @classmethod
+  def find_by_tag_status(cls, status, tags):
+    return cls.query().filter(cls.status==status).filter(cls.tags==tags)

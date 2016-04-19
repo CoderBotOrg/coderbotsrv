@@ -233,6 +233,16 @@ def api_user_required(func):
       return func(base_page, *args, **kwargs)
   return callf
 
+def api_bot_required(func):
+  def callf(base_page, *args, **kwargs):
+    auth = base_page.request.headers["Authorization"]
+    if auth != "CoderBot 123456":
+      retval = {"status": "ko", "message": "auth missing" }
+      base_page.response.write(json.dumps(retval))
+    else:
+      return func(base_page, *args, **kwargs)
+  return callf
+
 def reguser_required(func):
   def callf(base_page, *args, **kwargs):
     user = base_page.request.user if base_page.request.user else None
