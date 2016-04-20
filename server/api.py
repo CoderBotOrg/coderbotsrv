@@ -207,10 +207,12 @@ class ListProgramHandler(BaseHandler):
   @cors_enabled
   @api_user_required
   def post(self):
+    logging.info(self.request.body)
     data = json.loads(self.request.body)
     tags = data.get("tags", [])
     status = data.get("status", model.Program.STATUS_PRIVATE)
-    programs = model.Program.find_by_tag_status(tags, status)
+    logging.info("status: " + str(status) + " tags: " + str(tags))
+    programs = model.Program.find_by_status_tags(status, tags)
     program_list = []
     for program in programs:
       program_list.append(program.as_dict())

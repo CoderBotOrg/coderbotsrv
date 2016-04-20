@@ -170,5 +170,8 @@ class Program(model.Model):
     return cls.query().filter(cls.c_u==user.key).filter(cls.status==status)
 
   @classmethod
-  def find_by_tag_status(cls, status, tags):
-    return cls.query().filter(cls.status==status).filter(cls.tags==tags)
+  def find_by_status_tags(cls, status, tags):
+    query = cls.query().filter(cls.status==status)
+    if tags:
+        query = query.filter(cls.tags.IN(tags))
+    return query

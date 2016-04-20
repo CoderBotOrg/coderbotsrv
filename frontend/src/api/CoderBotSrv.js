@@ -37,16 +37,19 @@ export class CoderBotSrv {
   }
 
   static getPrivateProgramList () {
+    var data = {'status': 1}
+    data = JSON.stringify(data)
     var promise = new Promise(function (resolve, reject) {
-      $.get('/api/coderbot/1.0/program/list', function (data) {
+      $.get('/api/coderbot/1.0/program/list', data, function (data) {
         resolve(data.program_list)
       }, 'json')
     })
     return promise
   }
 
-  static findPublicProgramList (name, tags) {
-    var data = {'tags': tags}
+  static findPrograms (status, tags) {
+    var data = {'tags': tags, 'status': status}
+    data = JSON.stringify(data)
     var promise = new Promise(function (resolve, reject) {
       $.post('/api/coderbot/1.0/program/list', data, function (data) {
         resolve(data.program_list)
@@ -74,3 +77,7 @@ export class CoderBotSrv {
     return promise
   }
 }
+
+CoderBotSrv.PROGRAM_STATUS_PRIVATE = 1
+CoderBotSrv.PROGRAM_STATUS_PUBLIC = 10
+CoderBotSrv.PROGRAM_STATUS_DELETED = 99
