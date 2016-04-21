@@ -21,34 +21,37 @@ export default React.createClass({
   },
   getInitialState () {
     return {
-      programs: [],
-      tags: []
+      programs: []
     }
   },
 
-  componentDidMount () {
-    console.log(this.props)
-    console.log('status: ' + this.props.status + ' tags: ' + this.state.tags)
-    CoderBotSrv.findPrograms(this.props.status).then(function (program_list) {
-      console.log(program_list)
-      this.setState({
+  refreshProgramList: function (taglist) {
+    console.log('status: ' + this.props.status + ' tags: ' + taglist)
+    var component = this
+    CoderBotSrv.findPrograms(this.props.status, taglist).then(function (program_list) {
+      component.setState({
         programs: program_list
       })
-    }.bind(this), 'json')
+    })
+  },
+
+  componentWillMount () {
+    this.refreshProgramList()
   },
 
   handleTags: function (e) {
-    console.log('tags: ' + e.target.value)
-    this.setState({
-      tags: e.target.value.split(', ')
-    })
+    let taglist = e.target.value.split(',')
+    taglist = taglist.map(function (tag) { return tag !== '' ? $.trim(tag) : null })
+    this.refreshProgramList(taglist)
   },
 
   render () {
     return (
       <div className='content'>
         <div className='container-fluid'>
-          <input type='text' name='tags' placeholder='tags, ...' onChange={this.handleTags}/>
+          <div className='input-group'>
+            <input type='text' className='form-control' name='tags' placeholder='tags, ...' onChange={this.handleTags}/>
+          </div>
           <div className='row'>
             {this.state.programs.map(function (program) {
               return (
