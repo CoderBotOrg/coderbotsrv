@@ -27,10 +27,24 @@ from identitytoolkit import gitkitclient
 
 from base import BaseHandler, api_user_required, api_bot_required, api_user_gtk_required, cors_enabled
 
-class NewBotHandler(BaseHandler):
+class BotHandler(BaseHandler):
 
   @cors_enabled
-  def post(self):
+  @api_bot_required
+  def get(self, bot_id):
+    try:
+      bot = model.Bot.get_by_uid(bot_id)
+      data = {}
+      data = json.loads(self.request.body)
+      retval = {"status": "ok", "bot": json.dumps(bot.as_dict())}
+    except:
+      retval = {"status": "ko"}
+    self.response.write( json.dumps(retval) )
+
+  @cors_enabled
+  @api_bot_required
+  def post(self, bot_id):
+    logging.info("BotNew: " + bot_id)
     data = {}
     try:
       data = json.loads(self.request.body)
@@ -38,8 +52,9 @@ class NewBotHandler(BaseHandler):
       logging.error("invalid input: " + str(e))
       return
 
+    logging.info("BotNew: " + str(data))
     #search for existing Bot
-    bot = model.Bot.get_by_uid(data.get("bot_uid"))
+    bot = model.Bot.get_by_uid(bot_id)
     if bot:
       logging.info("bot already registered")
       self.response.write( json.dumps({"status": "ko", "retcode": "bot_already_registered"}) )
@@ -65,61 +80,38 @@ class NewBotHandler(BaseHandler):
     retval = {"status": "ok", "retcode": "registration_complete"}
     self.response.write( json.dumps(retval) )
 
-class ListBotHandler(BaseHandler):
-
   @cors_enabled
-  @api_user_required
-  def get(self):
-    logging.info("ListBotHandler")
-    user = self.get_current_user()
-    bots = model.Bot.get_by_owner(user)
-    bot_list = []
-    for bot in bots:
-      bot_list.append(bot.as_dict())
-    logging.info(str(bot_list))
-
-    retval = {"status": "ok", "bot_list": bot_list}
-    self.response.write( json.dumps(retval) )
-
-
-class BotHandler(BaseHandler):
-  def get(self, bot_uid):
-    bot = model.Bot.get_by_uid(bot_uid)
-    if bot == None:
-      return
-
-    retval = {"status": "ok", "bot_data": bot.as_dict() }
-    self.response.write( json.dumps(retval) )
-
-
+  @api_bot_required
   def put(self, bot_uid):
     data = {}
     try:
       data = json.loads(self.request.body)
+
+      #search for existing Bot
+      bot = model.Bot.get_by_uid(bot_uid)
+      if bot == None:
+        logging.error("bot not present ")
+        raise ValueError()
+
+      if data.get("local_ip"):
+        bot.local_ip = data.get("local_ip")
+      if data.get("name"):
+        bot.name = data.get("name")
+      if data.get("version"):
+        bot.version = data.get("version")
+      bot.put()
+
+      retval = {"status": "ok", "retcode": "update_complete"}
     except ValueError as e:
       logging.error("invalid input: " + str(e))
+      retval = {"status": "ko", "retcode": "invalid_input"}
 
-    #search for existing Bot
-    bot = model.Bot.get_by_uid(bot_uid)
-    if bot == None:
-      logging.info("bot not present ")
-      self.response.write( json.dumps({"status": "ko", "retcode": "bot_not_present"}) )
-      return
-
-    user_owner = User.get_by_email(data.get("user_email"))
-
-    if data.get("local_ip"):
-      bot.local_ip = data.get("local_ip")
-    if data.get("name"):
-      bot.name = data.get("name")
-    if data.get("version"):
-      bot.version = data.get("version")
-    bot.put()
-
-    retval = {"status": "ok", "retcode": "update_complete"}
     self.response.write( json.dumps(retval) )
 
-class NewUserHandler(BaseHandler):
+class BotUserNewHandler(BaseHandler):
+
+  @cors_enabled
+  @api_bot_required
   def post(self):
     data = {}
     try:
@@ -146,16 +138,74 @@ class NewUserHandler(BaseHandler):
     retval = {"status": "ok", "retcode": "registration_complete"}
     self.response.write( json.dumps(retval) )
 
-class GTKUserHandler(BaseHandler):
+class BotProgramListHandler(BaseHandler):
+  @cors_enabled
+  @api_bot_required
+  def get(self, bot_id):
+    logging.info("BotProgramListHandler")
+    try:
+      bot = model.Bot.get_by_id(bot_id)
+      programs = model.Program.find_by_author(bot.owner)
+      program_list = []
+      for program in programs:
+        program_list.append(program.as_dict())
 
-  @api_user_gtk_required
+      retval = {"status": "ok", "program_list": program_list}
+      logging.info(str(retval))
+    except:
+      retval = {"status": "ko"}
+    self.response.write( json.dumps(retval) )
+
+class BotProgramHandler(BaseHandler):
+
+  @cors_enabled
+  @api_bot_required
+  def post(self, prog_id):
+    data = json.loads(self.request.body)
+    if data.get("prog_id"):
+      #update existing
+      program = model.Program.get_by_id(data.get("prog_id"))
+    else:
+      #create new
+      program = model.Program()
+
+    program.from_dict(data)
+    program.put()
+
+    retval = {"status": "ok", "retcode": "program_created"}
+    self.response.write( json.dumps(retval) )
+
+  @cors_enabled
+  @api_bot_required
+  def get(self, prog_id):
+    retval = {}
+    try:
+      program = model.Program.get_by_id(int(prog_id))
+      retval = {"status": "ok", "program_data": program.as_dict()}
+    except:
+      retval = {"status": "ko", "retcode": "program_not_found"}
+    self.response.write( json.dumps(retval) )
+
+class UserBotListHandler(BaseHandler):
+
+  @cors_enabled
+  @api_user_required
   def get(self):
-    user = self.get_current_gtk_user()
-    retval = {"status": "ok", "user_data": user }
+    logging.info("ListBotHandler")
+    user = self.get_current_user()
+    bots = model.Bot.get_by_owner(user)
+    bot_list = []
+    for bot in bots:
+      bot_list.append(bot.as_dict())
+    logging.info(str(bot_list))
+
+    retval = {"status": "ok", "bot_list": bot_list}
     self.response.write( json.dumps(retval) )
 
 class UserHandler(BaseHandler):
 
+  @cors_enabled
+  @api_user_required
   def get(self):
     user = self.get_current_user()
     if user:
@@ -164,6 +214,7 @@ class UserHandler(BaseHandler):
       retval = {"status": "ko", "ret_code": "user_not_logged" }
     self.response.write( json.dumps(retval) )
 
+  @cors_enabled
   @api_user_required
   def post(self):
     user = self.get_current_user()
@@ -184,13 +235,44 @@ class UserHandler(BaseHandler):
     retval = {"status": "ok", "retcode": "user_updated" }
     self.response.write( json.dumps(retval) )
 
-class NewProgramHandler(BaseHandler):
-  def post(self):
-    data = {}
-    retval = {"status": "ok", "retcode": "program_created", "prog_id": 1}
+class UserBotHandler(BaseHandler):
+
+  @cors_enabled
+  @api_user_required
+  def get(self, bot_uid):
+    bot = model.Bot.get_by_uid(bot_uid)
+    if bot == None:
+      return
+
+    retval = {"status": "ok", "bot_data": bot.as_dict() }
     self.response.write( json.dumps(retval) )
 
-class ListProgramHandler(BaseHandler):
+  @cors_enabled
+  @api_user_required
+  def put(self, bot_uid):
+    data = {}
+    try:
+      data = json.loads(self.request.body)
+    except ValueError as e:
+      logging.error("invalid input: " + str(e))
+
+    #search for existing Bot
+    bot = model.Bot.get_by_uid(bot_uid)
+    if bot == None:
+      logging.info("bot not present ")
+      self.response.write( json.dumps({"status": "ko", "retcode": "bot_not_present"}) )
+      return
+
+    if data.get("name"):
+      bot.name = data.get("name")
+    if data.get("version"):
+      bot.version = data.get("version")
+    bot.put()
+
+    retval = {"status": "ok", "retcode": "update_complete"}
+    self.response.write( json.dumps(retval) )
+
+class UserProgramListHandler(BaseHandler):
 
   @cors_enabled
   @api_user_required
@@ -220,10 +302,10 @@ class ListProgramHandler(BaseHandler):
     retval = {"status": "ok", "program_list": program_list}
     self.response.write( json.dumps(retval) )
 
-class ProgramHandler(BaseHandler):
+class UserProgramHandler(BaseHandler):
 
   @cors_enabled
-  @api_bot_required
+  @api_user_required
   def post(self, prog_id):
     data = json.loads(self.request.body)
     if data.get("prog_id"):
@@ -236,9 +318,11 @@ class ProgramHandler(BaseHandler):
     program.from_dict(data)
     program.put()
 
-    retval = {"status": "ok", "retcode": "program_created"}
+    retval = {"status": "ok", "retcode": "program_created", "program": program.as_dict()}
     self.response.write( json.dumps(retval) )
 
+  @cors_enabled
+  @api_user_required
   def get(self, prog_id):
     retval = {}
     try:
@@ -250,12 +334,13 @@ class ProgramHandler(BaseHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/api/coderbot/1.0/bot', NewBotHandler),
-    ('/api/coderbot/1.0/bot/list', ListBotHandler),
     ('/api/coderbot/1.0/bot/(.*)', BotHandler),
-    ('/api/coderbot/1.0/user/new', NewUserHandler),
-    ('/api/coderbot/1.0/user/current', UserHandler),
-    ('/api/coderbot/1.0/program', NewProgramHandler),
-    ('/api/coderbot/1.0/program/list', ListProgramHandler),
-    ('/api/coderbot/1.0/program/(.*)', ProgramHandler)
+    ('/api/coderbot/1.0/bot/(.*)/user', BotUserNewHandler),
+    ('/api/coderbot/1.0/bot/(.*)/programs', BotProgramListHandler),
+    ('/api/coderbot/1.0/bot/(.*)/programs/(.*)', BotProgramHandler),
+    ('/api/coderbot/1.0/user/programs', UserProgramListHandler),
+    ('/api/coderbot/1.0/user/programs/(.*)', UserProgramHandler),
+    ('/api/coderbot/1.0/user', UserHandler),
+    ('/api/coderbot/1.0/user/bots', UserBotListHandler),
+    ('/api/coderbot/1.0/user/bots/(.*)', UserBotHandler)
 ], debug=True)

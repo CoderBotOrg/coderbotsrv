@@ -235,7 +235,7 @@ def api_user_required(func):
 
 def api_bot_required(func):
   def callf(base_page, *args, **kwargs):
-    auth = base_page.request.headers["Authorization"]
+    auth = base_page.request.headers.get("Authorization")
     if auth != "CoderBot 123456":
       retval = {"status": "ko", "message": "auth missing" }
       base_page.response.write(json.dumps(retval))

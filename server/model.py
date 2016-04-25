@@ -78,12 +78,12 @@ class Bot(model.Model):
   version = model.StringProperty()
   capabilities = model.StringProperty(repeated=True)
   local_ip = model.StringProperty(indexed=False)
-  owner = model.KeyProperty()
+  owner = model.KeyProperty(kind=User)
 
   c_d = model.DateTimeProperty(auto_now_add=True)
-  c_u = model.KeyProperty(kind=models.User)
+  c_u = model.KeyProperty(kind=User)
   m_d = model.DateTimeProperty(auto_now=True)
-  m_u = model.KeyProperty(kind=models.User)
+  m_u = model.KeyProperty(kind=User)
 
   status = model.IntegerProperty()
 
@@ -172,6 +172,6 @@ class Program(model.Model):
   @classmethod
   def find_by_status_tags(cls, status, tags):
     query = cls.query().filter(cls.status==status)
-    if tags:
+    if tags and len(tags):
         query = query.filter(cls.tags.IN(tags))
     return query
