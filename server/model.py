@@ -119,6 +119,7 @@ class Program(model.Model):
 
   name = model.StringProperty()
   code = model.TextProperty()
+  dom_code = model.TextProperty()
 
   parent = model.KeyProperty()
 
@@ -139,6 +140,7 @@ class Program(model.Model):
     return { "uid": str(self.key.id()),
              "name": self.name,
              "code": self.code,
+             "dom_code": self.dom_code,
              "tags": self.tags,
              "c_u": self.c_u.get().as_dict(),
              "c_d": datetime.datetime.strftime(self.c_d, "%Y%m%d%H%M%S"),
@@ -149,17 +151,19 @@ class Program(model.Model):
   def from_dict(self, data):
     self.name = data["name"]
     self.code = data["code"]
-    self.tags = []
+    self.dom_code = data["dom_code"]
     self.tags = data["tags"]
     #for t in data["tags"]:
     #  self.tags = t
-    self.status = data["status"]
-    if self.c_u is None:
+    self.status = data.get("status", 1)
+    if self.c_u is None and data.get("c_u"):
       self.c_u = User.get_by_id(int(data["c_u"]["uid"])).key
-    self.c_d = datetime.datetime.strptime(data["c_d"], "%Y%m%d%H%M%S")
-    if self.m_u is None:
+    if data.get("c_d"):
+      self.c_d = datetime.datetime.strptime(data["c_d"], "%Y%m%d%H%M%S")
+    if self.m_u is None and data.get("m_u"):
       self.m_u = User.get_by_id(int(data["m_u"]["uid"])).key
-    self.m_d = datetime.datetime.strptime(data["m_d"], "%Y%m%d%H%M%S")
+    if data.get("m_d"):
+      self.m_d = datetime.datetime.strptime(data["m_d"], "%Y%m%d%H%M%S")
 
   @classmethod
   def get_by_id(cls, id):

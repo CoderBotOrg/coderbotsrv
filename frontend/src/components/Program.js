@@ -9,10 +9,6 @@ export default React.createClass({
     children: React.PropTypes.array
   },
 
-  handleProgramDetail: function (event) {
-    console.log('onProgramDetail')
-  },
-
   render () {
     var link_to = '/programs/detail/' + this.props.programId
     return (
@@ -25,9 +21,7 @@ export default React.createClass({
             <img src={this.props.programImage}></img>
           </div>
           <div className='footer'>
-            <button onClick={this.handleProgramDetail}
-              className='btn btn-primary btn-fill'>Look inside</button>
-            <Link to={link_to}>Program Detail</Link>
+            <Link className='btn btn-primary btn-fill' to={link_to}>Program Detail</Link>
           </div>
         </div>
       </div>) }
