@@ -32,7 +32,6 @@ export default React.createClass({
   },
 
   render () {
-    console.log(this.state.program_data)
     var name = this.state.program_data.name
     var code = this.state.program_data.code
     return (
@@ -42,7 +41,7 @@ export default React.createClass({
             <h4 className='title'>{name}</h4>
           </div>
           <div className='content'>
-            <p>{code}</p>
+            <div className='code'>{code}</div>
           </div>
           <div className='footer'>
           </div>

@@ -76,6 +76,15 @@ export class CoderBotSrv {
     })
     return promise
   }
+
+  static pollEvents () {
+    var promise = new Promise(function (resolve, reject) {
+      $.get('/api/coderbot/1.0/user/events', function (data) {
+        resolve(data)
+      }, 'json')
+    })
+    return promise
+  }
 }
 
 CoderBotSrv.PROGRAM_STATUS_PRIVATE = 1

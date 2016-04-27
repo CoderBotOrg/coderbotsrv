@@ -18,8 +18,11 @@ from os import path
 
 import webapp2
 import json
+import datetime
+import time
 import logging
 
+from google.appengine.api import memcache
 import model
 
 # Import the helper functions
@@ -163,8 +166,14 @@ class BotProgramHandler(BaseHandler):
     try:
       data = json.loads(self.request.body)
       logging.info("program_data: " + str(data))
-      program = model.Program.get_by_id(int(prog_id))
+
       bot = model.Bot.get_by_uid(bot_id)
+
+      program = None
+      try:
+        program = model.Program.get_by_id(int(prog_id))
+      except ValueError:
+        logging.info("uid=None")
 
       if program is None:
         #create new
@@ -175,6 +184,12 @@ class BotProgramHandler(BaseHandler):
       program.from_dict(data)
       program.m_u = bot.owner
       program.put()
+
+      events = memcache.get("events-uid-" + str(bot.owner.id))
+      if events is None:
+        events = []
+      events.insert(0, {"ts": str(int(round(time.time() * 1000)))[:-1], "type": "program"})
+      memcache.set("events-uid-" + str(bot.owner.id), events)
 
       retval = {"status": "ok", "retcode": "program_saved", "program": program.as_dict()}
     except Exception as e:
@@ -249,6 +264,23 @@ class UserHandler(BaseHandler):
     except Exception as e:
       logging.error("Exception: " + str(e))
       retval = {"status": "ko"}
+    self.response.write( json.dumps(retval) )
+
+class UserEventHandler(BaseHandler):
+
+  @cors_enabled
+  @api_user_required
+  def get(self):
+    user = self.get_current_user()
+    now = datetime.datetime.now()
+    events = []
+    while datetime.datetime.now() < now + datetime.timedelta(seconds=20):
+      events = memcache.get("events-uid-" + str(user.key.id), [])
+      if events:
+        break
+      else:
+        time.sleep(1)
+    retval = {"status": "ok", "events": events}
     self.response.write( json.dumps(retval) )
 
 class UserBotHandler(BaseHandler):
@@ -359,6 +391,7 @@ app = webapp2.WSGIApplication([
     ('/api/coderbot/1.0/bot/(.*)/programs', BotProgramListHandler),
     ('/api/coderbot/1.0/bot/(.*)/user', BotUserNewHandler),
     ('/api/coderbot/1.0/bot/(.*)', BotHandler),
+    ('/api/coderbot/1.0/user/events', UserEventHandler),
     ('/api/coderbot/1.0/user/programs', UserProgramListHandler),
     ('/api/coderbot/1.0/user/programs/(.*)', UserProgramHandler),
     ('/api/coderbot/1.0/user/bots', UserBotListHandler),

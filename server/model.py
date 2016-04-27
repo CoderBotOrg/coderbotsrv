@@ -136,6 +136,8 @@ class Program(model.Model):
 
   status = model.IntegerProperty()
 
+  version = model.IntegerProperty(indexed=False)
+
   def as_dict(self):
     return { "uid": str(self.key.id()),
              "name": self.name,
@@ -146,7 +148,8 @@ class Program(model.Model):
              "c_d": datetime.datetime.strftime(self.c_d, "%Y%m%d%H%M%S"),
              "m_u": self.m_u.get().as_dict(),
              "m_d": datetime.datetime.strftime(self.m_d, "%Y%m%d%H%M%S"),
-             "status": self.status }
+             "status": self.status,
+             "version": self.version }
 
   def from_dict(self, data):
     self.name = data["name"]
@@ -164,6 +167,7 @@ class Program(model.Model):
       self.m_u = User.get_by_id(int(data["m_u"]["uid"])).key
     if data.get("m_d"):
       self.m_d = datetime.datetime.strptime(data["m_d"], "%Y%m%d%H%M%S")
+    self.version = data["version"]
 
   @classmethod
   def get_by_id(cls, id):
