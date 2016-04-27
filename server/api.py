@@ -163,7 +163,7 @@ class BotProgramHandler(BaseHandler):
     try:
       data = json.loads(self.request.body)
       logging.info("program_data: " + str(data))
-      program = model.Program.get_by_id(prog_id)
+      program = model.Program.get_by_id(int(prog_id))
       bot = model.Bot.get_by_uid(bot_id)
 
       if program is None:
