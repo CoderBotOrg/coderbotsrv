@@ -77,10 +77,10 @@ export class CoderBotSrv {
     return promise
   }
 
-  static pollEvents () {
+  static getEvents () {
     var promise = new Promise(function (resolve, reject) {
       $.get('/api/coderbot/1.0/user/events', function (data) {
-        resolve(data)
+        resolve(data.events)
       }, 'json')
     })
     return promise

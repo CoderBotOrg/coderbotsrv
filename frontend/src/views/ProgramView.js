@@ -12,6 +12,13 @@ export default React.createClass({
 
   componentDidMount () {
     setTitle(this.props.route.title)
+    var component = this
+    CoderBotSrv.getEvents().then(function (events) {
+      console.log(events)
+      if (events.length) {
+        component.forceUpdate()
+      }
+    })
   },
 
   render () {

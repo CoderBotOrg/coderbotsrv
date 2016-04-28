@@ -188,6 +188,8 @@ class BotProgramHandler(BaseHandler):
       events = memcache.get("events-uid-" + str(bot.owner.id))
       if events is None:
         events = []
+      if len(events) >= 10:
+        events = events[0:9]
       events.insert(0, {"ts": str(int(round(time.time() * 1000)))[:-1], "type": "program"})
       memcache.set("events-uid-" + str(bot.owner.id), events)
 
