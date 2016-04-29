@@ -80,6 +80,7 @@ export class CoderBotSrv {
   static getEvents () {
     var promise = new Promise(function (resolve, reject) {
       $.get('/api/coderbot/1.0/user/events', function (data) {
+        console.log(data)
         resolve(data.events)
       }, 'json')
     })

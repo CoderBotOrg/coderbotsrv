@@ -185,13 +185,15 @@ class BotProgramHandler(BaseHandler):
       program.m_u = bot.owner
       program.put()
 
-      events = memcache.get("events-uid-" + str(bot.owner.id))
-      if events is None:
-        events = []
-      if len(events) >= 10:
-        events = events[0:9]
-      events.insert(0, {"ts": str(int(round(time.time() * 1000)))[:-1], "type": "program"})
-      memcache.set("events-uid-" + str(bot.owner.id), events)
+      sessions = self.get_sessions().values()
+      for s in sessions:
+        if s.get("user").key.id == bot.owner.id:
+          events = s.get("events", [])
+          if len(events) > 9:
+            events = events[0:9]
+            events.insert(0, {"ts": str(int(round(time.time() * 1000)))[:-1], "type": "program"})
+            s["events"] = events
+          s["events"] = events
 
       retval = {"status": "ok", "retcode": "program_saved", "program": program.as_dict()}
     except Exception as e:
@@ -277,10 +279,11 @@ class UserEventHandler(BaseHandler):
     now = datetime.datetime.now()
     events = []
     while datetime.datetime.now() < now + datetime.timedelta(seconds=20):
-      events = memcache.get("events-uid-" + str(user.key.id), [])
+      events = self.session.get("events")
       if events:
         break
       else:
+        events = []
         time.sleep(1)
     retval = {"status": "ok", "events": events}
     self.response.write( json.dumps(retval) )
