@@ -152,7 +152,6 @@ class BotProgramListHandler(BaseHandler):
         program_list.append(program.as_dict())
 
       retval = {"status": "ok", "program_list": program_list}
-      logging.info(str(retval))
     except Exception as e:
       logging.error("Exception: " + str(e))
       retval = {"status": "ko"}
@@ -165,7 +164,7 @@ class BotProgramHandler(BaseHandler):
   def post(self, bot_id, prog_id):
     try:
       data = json.loads(self.request.body)
-      logging.info("program_data: " + str(data))
+      #logging.info("program_data: " + str(data))
 
       bot = model.Bot.get_by_uid(bot_id)
 
@@ -185,15 +184,13 @@ class BotProgramHandler(BaseHandler):
       program.m_u = bot.owner
       program.put()
 
-      sessions = self.get_sessions().values()
-      for s in sessions:
-        if s.get("user").key.id == bot.owner.id:
-          events = s.get("events", [])
+      for channel in self.channels().values():
+        if channel.get("user_id") == bot.owner.id:
+          events = channel.get("events")
           if len(events) > 9:
             events = events[0:9]
-            events.insert(0, {"ts": str(int(round(time.time() * 1000)))[:-1], "type": "program"})
-            s["events"] = events
-          s["events"] = events
+          events.insert(0, {"ts": str(int(round(time.time() * 1000)))[:-1], "type": "program"})
+          channel["events"] = events
 
       retval = {"status": "ok", "retcode": "program_saved", "program": program.as_dict()}
     except Exception as e:
@@ -226,7 +223,7 @@ class UserBotListHandler(BaseHandler):
       bot_list = []
       for bot in bots:
         bot_list.append(bot.as_dict())
-      logging.info(str(bot_list))
+      #logging.info(str(bot_list))
 
       retval = {"status": "ok", "bot_list": bot_list}
     except Exception as e:
@@ -277,10 +274,15 @@ class UserEventHandler(BaseHandler):
   def get(self):
     user = self.get_current_user()
     now = datetime.datetime.now()
+
+    channel = self.channels().get(id(self.session))
+    if channel is None:
+        self.channels()[id(self.session)] = channel = {"user_id": user.key.id, "ts" : now, "events":[]}
+
     events = []
     while datetime.datetime.now() < now + datetime.timedelta(seconds=20):
-      events = self.session.get("events")
-      if events:
+      events = channel["events"]
+      if len(events):
         break
       else:
         events = []

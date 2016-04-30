@@ -10,15 +10,18 @@ export default React.createClass({
     children: PropTypes.array
   },
 
+  updateProgList (component, events) {
+    console.log(events)
+    if (events.length) {
+      component.forceUpdate()
+    }
+    CoderBotSrv.getEvents().then(function (events) { component.updateProgList(component, events) })
+  },
+
   componentDidMount () {
     setTitle(this.props.route.title)
     var component = this
-    CoderBotSrv.getEvents().then(function (events) {
-      console.log(events)
-      if (events.length) {
-        component.forceUpdate()
-      }
-    })
+    this.updateProgList(component, [])
   },
 
   render () {

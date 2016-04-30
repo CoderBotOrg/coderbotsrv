@@ -74,8 +74,11 @@ class BaseHandler(webapp.RequestHandler):
       # Returns a session using the default cookie key.
     return self.session_store.get_session(backend="memcache")
 
-  def get_sessions(self):
-    return self.session_store.sessions
+  channels_store = {}
+  
+  @classmethod
+  def channels(cls):
+    return cls.channels_store
 
   def get_current_user(self):
     user = self.session.get("user")
