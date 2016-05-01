@@ -21,6 +21,7 @@ import json
 import datetime
 import time
 import logging
+import copy
 
 from google.appengine.api import memcache
 import model
@@ -281,11 +282,11 @@ class UserEventHandler(BaseHandler):
 
     events = []
     while datetime.datetime.now() < now + datetime.timedelta(seconds=20):
-      events = channel["events"]
+      events = copy.copy(channel["events"])
       if len(events):
+        channel["events"] = []
         break
       else:
-        events = []
         time.sleep(1)
     retval = {"status": "ok", "events": events}
     self.response.write( json.dumps(retval) )

@@ -21,14 +21,26 @@ export default React.createClass({
   },
   getInitialState () {
     return {
+      tags: [],
       programs: []
     }
   },
 
-  refreshProgramList: function (taglist) {
-    console.log('status: ' + this.props.status + ' tags: ' + taglist)
+  handleEvents (events) {
+    console.log(events)
+    if (events.length) {
+      this.refreshProgramList()
+      console.log('forcing refreshProgramList')
+    }
+    // reschedule
     var component = this
-    CoderBotSrv.findPrograms(this.props.status, taglist).then(function (program_list) {
+    CoderBotSrv.getEvents().then(function (events) { component.handleEvents(events) })
+  },
+
+  refreshProgramList () {
+    console.log('status: ' + this.props.status + ' tags: ' + this.state.tags)
+    var component = this
+    CoderBotSrv.findPrograms(this.props.status, this.state.tags).then(function (program_list) {
       component.setState({
         programs: program_list
       })
@@ -39,10 +51,16 @@ export default React.createClass({
     this.refreshProgramList()
   },
 
+  componentDidMount () {
+    let events = [] // Initial schedule
+    this.handleEvents(events)
+  },
+
   handleTags: function (e) {
     let taglist = e.target.value.split(',')
     taglist = taglist.map(function (tag) { return tag !== '' ? $.trim(tag) : null })
-    this.refreshProgramList(taglist)
+    this.setState({'tags': taglist})
+    this.refreshProgramList()
   },
 
   render () {
