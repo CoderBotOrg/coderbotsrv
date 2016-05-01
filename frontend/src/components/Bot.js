@@ -16,12 +16,15 @@ export default React.createClass({
             <h4 className='title'>{this.props.botName}</h4>
           </div>
           <div className='content'>
-            <img src={this.props.botImage}></img>
+            <img src={this.props.botImage} className='bot-avatar'></img>
           </div>
           <div className='footer'>
             <a href={this.props.botLocalUrl}
               target='_bot_ui'
               className='btn btn-primary btn-fill'>Open Bot UI</a>
+            <a href={this.props.botLocalUrl}
+              target='_bot_ui'
+              className='btn btn-fill'>Settings</a>
           </div>
         </div>
       </div>) }

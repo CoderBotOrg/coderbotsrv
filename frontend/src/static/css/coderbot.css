@@ -67,22 +67,26 @@ header.carousel .fill {
     font-style: italic;
 }
 
+.bot-avatar {
+  width: 100%;
+}
+
 /* Footer Styles */
 
 footer {
     margin: 50px 0;
 }
 
-a.jumbo:hover { 
+a.jumbo:hover {
 	text-decoration: none
-}    
+}
 
 ul.list-social-icon-size {
 	font-size: 50px;
 }
 
 .navbar-brand {
-	padding-top:0px; 
+	padding-top:0px;
 	font-family:'Courier';
 	font-size: 32pt;
 }
@@ -111,7 +115,7 @@ ul.list-social-icon-size {
 		font-size: 48px;
 	}
 	.navbar-brand {
-		padding-top:14px; 	
+		padding-top:14px;
 		font-size: 10pt;
 		padding-right:2px
 	}
@@ -130,13 +134,13 @@ ul.list-social-icon-size {
     }
 	ul.list-social-icon-size {
 		font-size: 32px;
-	} 
+	}
 	.navbar-brand {
-		padding-top:0px; 	
+		padding-top:0px;
 		font-size: 32pt;
 		padding-right:2px
 	}
 	.navbar-logo {
 		width: 79px;
-	}	   
+	}
 }

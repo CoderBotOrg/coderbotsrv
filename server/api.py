@@ -225,6 +225,7 @@ class UserBotListHandler(BaseHandler):
       for bot in bots:
         bot_list.append(bot.as_dict())
       #logging.info(str(bot_list))
+      logging.info("bot: " + str(bot_list))
 
       retval = {"status": "ok", "bot_list": bot_list}
     except Exception as e:

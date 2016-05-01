@@ -45,7 +45,7 @@ export default React.createClass({
           <div className='row'>
             {this.state.bots.map(function (bot) {
               return (
-                <Bot key={bot.uid} botName={bot.name} botLocalUrl={bot.local_url} botImage={bot.image_url}/>)
+                <Bot key={bot.uid} botName={bot.name} botLocalUrl={bot.local_url} botImage={bot.image}/>)
             })
           }
           </div>

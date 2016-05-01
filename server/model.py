@@ -19,6 +19,8 @@
 import logging
 import fpformat
 import datetime
+import os
+import base64
 
 from google.appengine.ext.ndb import model, Cursor, Future, tasklet
 from google.appengine.ext import blobstore
@@ -90,9 +92,16 @@ class Bot(model.Model):
   def as_dict(self):
     return { "uid": self.uid,
              "name": self.name,
-             "image_url": self.image,
+             "image": "data:image/jpeg;base64," + base64.b64encode(self.image) if self.image else '/static/img/coderbot_default_image.jpg',
              "version": self.version,
              "local_url": "http://" + self.local_ip + ":8080/" }
+
+  def from_dict(self, data):
+    self.uid = data.get("uid")
+    self.name = data.get("name")
+    if data.get("image"):
+      self.image = base64.b64decode(data.get("image"))
+    self.version = data.get("version")
 
   @classmethod
   def get_by_uid(cls, uid):
