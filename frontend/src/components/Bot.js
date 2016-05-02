@@ -21,10 +21,11 @@ export default React.createClass({
           <div className='footer'>
             <a href={this.props.botLocalUrl}
               target='_bot_ui'
-              className='btn btn-primary btn-fill'>Open Bot UI</a>
+              className='btn btn-primary btn-fill'><i className='pe-7s-plugin'></i>Open Bot UI</a>
             <a href={this.props.botLocalUrl}
-              target='_bot_ui'
-              className='btn btn-fill'>Settings</a>
+              className='btn btn-fill'><i className='pe-7s-config'></i>Settings</a>
+            <a href={this.props.botLocalUrl}
+              className='btn btn-fill'><i className='pe-7s-airplay'></i>Sync</a>
           </div>
         </div>
       </div>) }

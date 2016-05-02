@@ -97,10 +97,10 @@ class BotHandler(BaseHandler):
 
       if data.get("local_ip"):
         bot.local_ip = data.get("local_ip")
-      if data.get("name"):
-        bot.name = data.get("name")
-      if data.get("version"):
-        bot.version = data.get("version")
+      if data.get("bot_name"):
+        bot.name = data.get("bot_name")
+      if data.get("bot_version"):
+        bot.version = data.get("bot_version")
       bot.put()
 
       retval = {"status": "ok", "retcode": "update_complete"}

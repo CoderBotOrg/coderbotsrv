@@ -238,6 +238,7 @@ input:focus {
   display: block;
   top: 0;
   left: 0;
+  background-image: url('/static/img/sidebar-1.jpg');
   background-size: cover;
   background-position: center center;
 }
