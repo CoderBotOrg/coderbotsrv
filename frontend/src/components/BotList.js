@@ -27,9 +27,9 @@ export default React.createClass({
   },
 
   componentDidMount () {
-    var _this = this
+    var component = this
     CoderBotSrv.getOwnBotList().then(function (bot_list) {
-      _this.setState({
+      component.setState({
         bots: bot_list
       })
     })
@@ -45,7 +45,11 @@ export default React.createClass({
           <div className='row'>
             {this.state.bots.map(function (bot) {
               return (
-                <Bot key={bot.uid} botName={bot.name} botLocalUrl={bot.local_url} botImage={bot.image}/>)
+                <Bot key={bot.uid}
+                  botId={bot.uid}
+                  botName={bot.name}
+                  botLocalUrl={bot.local_url}
+                  botImage={bot.image}/>)
             })
           }
           </div>

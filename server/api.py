@@ -310,8 +310,8 @@ class UserBotHandler(BaseHandler):
   def put(self, bot_uid):
     data = {}
     try:
+      logging.info(str(self.request.body))
       data = json.loads(self.request.body)
-
       #search for existing Bot
       bot = model.Bot.get_by_uid(bot_uid)
       if bot == None:
@@ -320,6 +320,8 @@ class UserBotHandler(BaseHandler):
       else:
         if data.get("name"):
           bot.name = data.get("name")
+        if data.get("image"):
+          bot.image = data.get("image")
         if data.get("version"):
           bot.version = data.get("version")
         bot.put()

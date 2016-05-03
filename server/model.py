@@ -100,7 +100,7 @@ class Bot(model.Model):
     self.uid = data.get("uid")
     self.name = data.get("name")
     if data.get("image"):
-      self.image = base64.b64decode(data.get("image"))
+      self.image = base64.b64decode(data.get("image")[len("data:image/jpeg;base64,"):])
     self.version = data.get("version")
 
   @classmethod

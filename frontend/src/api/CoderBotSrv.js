@@ -27,11 +27,11 @@ export class CoderBotSrv {
   }
 
   static setBotDetail (bot_id, bot_data) {
-    var data = bot_data
+    var data = JSON.strigify(bot_data)
     var promise = new Promise(function (resolve, reject) {
-      $.post('/api/coderbot/1.0/user/bots/' + bot_id, data, function (data) {
+      $.ajax({url: '/api/coderbot/1.0/user/bots/' + bot_id, type: 'PUT', data: data, success: function (data) {
         resolve(data.bot_data)
-      }, 'json')
+      }, dataType: 'json'})
     })
     return promise
   }

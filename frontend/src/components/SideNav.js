@@ -10,7 +10,7 @@ export default React.createClass({
 
   render () {
     return (
-      <div className='sidebar' data-color='azure' data-image='/static/img/sidebar-5.jpg'>
+      <div className='sidebar' data-color='azure' data-image='/static/img/sidebar-1.jpg'>
         <div className='sidebar-wrapper'>
           <div className='logo'>
             <IndexLink to='/'>

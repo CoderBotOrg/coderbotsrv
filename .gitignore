@@ -3,6 +3,7 @@
 *.pyc
 
 node_modules
-
 dist
 coverage
+
+server/static/js/app(.*)
