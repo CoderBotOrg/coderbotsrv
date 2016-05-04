@@ -87,8 +87,9 @@ export default React.createClass({
               onChange={this.handleImageChange}></input>
           </div>
           <div className='footer'>
-            <Link to='/bots' className='btn btn-sm' onClick={this.handleSave}>
-              <i className='pe-7s-refresh-2'></i>Save and close</Link>
+            <button onClick={this.handleSave} className='btn btn-sm'>Save</button>
+            <Link to='/bots' className='btn btn-sm'>
+              <i className='pe-7s-refresh-2'></i>Close</Link>
           </div>
         </div>
       </div>) }

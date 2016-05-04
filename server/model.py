@@ -97,11 +97,14 @@ class Bot(model.Model):
              "local_url": "http://" + self.local_ip + ":8080/" }
 
   def from_dict(self, data):
-    self.uid = data.get("uid")
-    self.name = data.get("name")
+    if data.get("uid"):
+      self.uid = data.get("uid")
+    if data.get("name"):
+      self.name = data.get("name")
     if data.get("image"):
-      self.image = base64.b64decode(data.get("image")[len("data:image/jpeg;base64,"):])
-    self.version = data.get("version")
+      self.image = base64.b64decode(str(data.get("image"))[len("data:image/jpeg;base64,"):])
+    if data.get("version"):
+      self.version = data.get("version")
 
   @classmethod
   def get_by_uid(cls, uid):
