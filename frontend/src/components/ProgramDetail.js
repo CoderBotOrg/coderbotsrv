@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import {CoderBotSrv} from '../api/CoderBotSrv'
 import {setTitle} from '../components/Title'
-// import {Blockly} from '../static/js/blockly/blockly_compressed'
+import {MyBlockly} from '../static/js/blockly/blockly'
 
 var inject_once = true
 
@@ -27,10 +27,14 @@ export default React.createClass({
         program_data: program_data
       })
       if (inject_once) {
-        inject_once = false
-        // Blockly.inject(document.getElementById('blocklyDiv'),
-        //   {path: '../../', toolbox: document.getElementById('toolbox'),
-        //   scrollbars: true, maxBlocks: -1})
+        console.log('Blockly.inject')
+        // inject_once = false
+        Blockly.inject(document.getElementById('blocklyDiv'),
+          {path: '../../', toolbox: document.getElementById('toolbox'),
+          scrollbars: true, maxBlocks: -1})
+        let xml = Blockly.Xml.textToDom(program_data.dom_code)
+        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml)
+
         // $('.blocklyToolboxDiv').appendTo('#page-program')
         // $('.blocklyTooltipDiv').appendTo('#page-program')
         // $('.blocklyWidgetDiv').appendTo('#page-program')
@@ -54,7 +58,9 @@ export default React.createClass({
             <h4 className='title'>{name}</h4>
           </div>
           <div className='content' id='blockly'>
-            <div className='code' id='blocklyDiv'>{code}</div>
+            <div id='blocklyDiv'></div>
+            <div id='toolbox'></div>
+            <div className='code'>{code}</div>
           </div>
           <div className='footer'>
           </div>
