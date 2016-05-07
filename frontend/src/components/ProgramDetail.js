@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react'
 import {CoderBotSrv} from '../api/CoderBotSrv'
 import {setTitle} from '../components/Title'
-import {MyBlockly} from '../static/js/blockly/blockly'
+import {BlocklyWorkspace} from '../static/js/blockly/blockly'
 
-var inject_once = true
+// var inject_once = true
 
 export default React.createClass({
   propTypes: {
@@ -20,28 +20,22 @@ export default React.createClass({
 
   componentDidMount () {
     var component = this
+    console.log('Blockly.inject')
+    this.bw = new BlocklyWorkspace('blocklyDiv', 'toolbox')
     CoderBotSrv.getProgramDetail(this.props.params.programId).then(function (program_data) {
       setTitle('Program: ' + program_data.name)
       // console.log(program_data)
       component.setState({
         program_data: program_data
       })
-      if (inject_once) {
-        console.log('Blockly.inject')
-        // inject_once = false
-        Blockly.inject(document.getElementById('blocklyDiv'),
-          {path: '../../', toolbox: document.getElementById('toolbox'),
-          scrollbars: true, maxBlocks: -1})
-        let xml = Blockly.Xml.textToDom(program_data.dom_code)
-        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml)
-
-        // $('.blocklyToolboxDiv').appendTo('#page-program')
-        // $('.blocklyTooltipDiv').appendTo('#page-program')
-        // $('.blocklyWidgetDiv').appendTo('#page-program')
-      }
-
-      // console.log(_this.state.program_data)
+      console.log('Blockly.load program code')
+      component.bw.load(program_data.dom_code)
     })
+  },
+
+  componentWillUnmount () {
+    console.log('Blockly.clear program code')
+    this.bw.clear()
   },
 
   handleProgramDetail: function (event) {

@@ -13,7 +13,6 @@ export default React.createClass({
 
   componentDidMount () {
     setTitle(this.props.route.title)
-    console.log(this.props.params.botId)
   },
 
   render () {

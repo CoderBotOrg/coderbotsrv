@@ -27,7 +27,6 @@ export default React.createClass({
   },
 
   handleEvents (events) {
-    console.log(events)
     if (events.length) {
       this.refreshProgramList()
       console.log('forcing refreshProgramList')
