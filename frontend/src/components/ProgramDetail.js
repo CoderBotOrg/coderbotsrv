@@ -21,7 +21,7 @@ export default React.createClass({
   componentDidMount () {
     var component = this
     console.log('Blockly.inject')
-    this.bw = new BlocklyWorkspace('blocklyDiv', 'toolbox')
+    this.bw = new BlocklyWorkspace('blocklyDiv', 'blocklyToolbox')
     CoderBotSrv.getProgramDetail(this.props.params.programId).then(function (program_data) {
       setTitle('Program: ' + program_data.name)
       // console.log(program_data)
@@ -38,23 +38,20 @@ export default React.createClass({
     this.bw.clear()
   },
 
-  handleProgramDetail: function (event) {
+  handleProgramDetail (event) {
     console.log('onProgramDetail')
   },
 
   render () {
-    let name = this.state.program_data.name
-    let code = this.state.program_data.code
     return (
       <div className='col-md-12'>
         <div className='card'>
           <div className='header'>
-            <h4 className='title'>{name}</h4>
+            <h4 className='title'>{this.state.program_data.name}</h4>
           </div>
-          <div className='content' id='blockly'>
-            <div id='blocklyDiv'></div>
-            <div id='toolbox'></div>
-            <div className='code'>{code}</div>
+          <div className='content blockly-area' id='blocklyArea'>
+            <div id='blocklyDiv' className='blockly-workspace'></div>
+            <div id='blocklyToolbox' className='hidden'></div>
           </div>
           <div className='footer'>
           </div>

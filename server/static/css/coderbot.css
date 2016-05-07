@@ -91,6 +91,19 @@ ul.list-social-icon-size {
 	background: rgba(255,255,255,0.5);
 }
 
+.blockly-area {
+  height: 100%;
+}
+
+.blockly-workspace {
+  #position: relative;
+  #left: 10px;
+  #right: 10px;
+  #top: 10px;
+  #bottom: 10px;
+  height: 400px;
+}
+
 /* Responsive Styles */
 
 @media(max-width:1199px) {
