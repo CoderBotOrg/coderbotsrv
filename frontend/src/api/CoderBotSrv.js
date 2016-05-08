@@ -68,9 +68,9 @@ export class CoderBotSrv {
   }
 
   static setProgramDetail (prog_id, program) {
-    var data = program
+    var data = JSON.stringify(program)
     var promise = new Promise(function (resolve, reject) {
-      $.post('/api/coderbot/1.0/user/program/' + prog_id, data, function (data) {
+      $.post('/api/coderbot/1.0/user/programs/' + prog_id, data, function (data) {
         resolve(data.program_data)
       }, 'json')
     })

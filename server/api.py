@@ -367,8 +367,9 @@ class UserProgramHandler(BaseHandler):
   @cors_enabled
   @api_user_required
   def post(self, prog_id):
+    logging.info(self.request.body)
     data = json.loads(self.request.body)
-    program = model.Program.get_by_id(prog_id)
+    program = model.Program.get_by_id(int(prog_id))
     if program is None:
       #create new
       program = model.Program()

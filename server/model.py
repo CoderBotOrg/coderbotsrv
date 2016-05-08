@@ -172,11 +172,15 @@ class Program(model.Model):
     #  self.tags = t
     self.status = data.get("status", 1)
     if self.c_u is None and data.get("c_u"):
-      self.c_u = User.get_by_id(int(data["c_u"]["uid"])).key
+      user = User.get_by_id(int(data["c_u"]["uid"]))
+      if user:
+        self.c_u = user.key
     if data.get("c_d"):
       self.c_d = datetime.datetime.strptime(data["c_d"], "%Y%m%d%H%M%S")
     if self.m_u is None and data.get("m_u"):
-      self.m_u = User.get_by_id(int(data["m_u"]["uid"])).key
+      user = User.get_by_id(int(data["m_u"]["uid"]))
+      if user:
+        self.m_u = user.key
     if data.get("m_d"):
       self.m_d = datetime.datetime.strptime(data["m_d"], "%Y%m%d%H%M%S")
     self.version = data["version"]

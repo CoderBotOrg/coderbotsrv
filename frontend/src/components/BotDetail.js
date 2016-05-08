@@ -27,7 +27,6 @@ export default React.createClass({
   },
 
   handleName: function (e) {
-    console.log('handleName')
     let bot = this.state.bot
     bot.name = e.target.value
     setTitle(bot.name + ' settings')
@@ -87,8 +86,8 @@ export default React.createClass({
               onChange={this.handleImageChange}></input>
           </div>
           <div className='footer'>
-            <button onClick={this.handleSave} className='btn btn-sm'>Save</button>
-            <Link to='/bots' className='btn btn-sm'>
+            <button onClick={this.handleSave} className='btn'><i className='pe-7s-save'></i>Save</button>
+            <Link to='/bots' className='btn'>
               <i className='pe-7s-refresh-2'></i>Close</Link>
           </div>
         </div>
