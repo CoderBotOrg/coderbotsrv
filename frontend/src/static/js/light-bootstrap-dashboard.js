@@ -60,75 +60,36 @@ lbd = {
     },
     initLeftMenu: function(){
          if(!navbar_initialized){
-            $navbar = $('nav').find('.navbar-collapse').first().clone(true);
-
-            $sidebar = $('.sidebar');
-            sidebar_color = $sidebar.data('color');
-
-            $logo = $sidebar.find('.logo').first();
-            logo_content = $logo[0].outerHTML;
-
-            ul_content = '';
-
-            $navbar.attr('data-color',sidebar_color);
-
-            // add the content from the sidebar to the right menu
-            content_buff = $sidebar.find('.nav').html();
-            ul_content = ul_content + content_buff;
-
-            //add the content from the regular header to the right menu
-            $navbar.children('ul').each(function(){
-                content_buff = $(this).html();
-                ul_content = ul_content + content_buff;
-            });
-
-            ul_content = '<ul class="nav navbar-nav">' + ul_content + '</ul>';
-
-            navbar_content = logo_content + ul_content;
-
-            $navbar.html(navbar_content);
-
-            $('body').append($navbar);
-
-            background_image = $sidebar.data('image');
-            if(background_image != undefined){
-                $navbar.css('background',"url('" + background_image + "')")
-                       .removeAttr('data-nav-image')
-                       .addClass('has-image');
-            }
-
 
              $toggle = $('.navbar-toggle');
 
-             $navbar.find('a').removeClass('btn btn-round btn-default');
-             $navbar.find('button').removeClass('btn-round btn-fill btn-info btn-primary btn-success btn-danger btn-warning btn-neutral');
-             $navbar.find('button').addClass('btn-simple btn-block');
-
              $toggle.click(function (){
+                console.log("click");
+                $('#sidebar').css('display', 'visible');
                 if(lbd.misc.navbar_menu_visible == 1) {
-                    $('html').removeClass('nav-open');
+                    //$('html').removeClass('nav-open');
                     lbd.misc.navbar_menu_visible = 0;
-                    $('#bodyClick').remove();
-                     setTimeout(function(){
-                        $toggle.removeClass('toggled');
-                     }, 400);
+                    //$('#bodyClick').remove();
+                    // setTimeout(function(){
+                    //    $toggle.removeClass('toggled');
+                    // }, 400);
 
                 } else {
-                    setTimeout(function(){
-                        $toggle.addClass('toggled');
-                    }, 430);
+                    //setTimeout(function(){
+                    //    $toggle.addClass('toggled');
+                    //}, 430);
 
-                    div = '<div id="bodyClick"></div>';
-                    $(div).appendTo("body").click(function() {
-                        $('html').removeClass('nav-open');
-                        lbd.misc.navbar_menu_visible = 0;
-                        $('#bodyClick').remove();
-                         setTimeout(function(){
-                            $toggle.removeClass('toggled');
-                         }, 400);
-                    });
+                    //div = '<div id="bodyClick"></div>';
+                    //$(div).appendTo("body").click(function() {
+                    //    $('html').removeClass('nav-open');
+                    //    lbd.misc.navbar_menu_visible = 0;
+                    //    $('#bodyClick').remove();
+                    //     setTimeout(function(){
+                    //        $toggle.removeClass('toggled');
+                    //     }, 400);
+                    //});
 
-                    $('html').addClass('nav-open');
+                    //$('html').addClass('nav-open');
                     lbd.misc.navbar_menu_visible = 1;
 
                 }
