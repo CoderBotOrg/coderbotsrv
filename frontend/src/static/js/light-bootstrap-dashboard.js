@@ -12,11 +12,6 @@ $(document).ready(function(){
     // check if there is an image set for the sidebar's background
     lbd.checkSidebarImage();
 
-    // Init navigation toggle for small screens
-    if(window_width <= 991){
-        lbd.initLeftMenu();
-    }
-
     //  Activate the tooltips
     $('[rel="tooltip"]').tooltip();
 
@@ -37,13 +32,6 @@ $(document).ready(function(){
 
 });
 
-// activate collapse right menu when the windows is resized
-$(window).resize(function(){
-    if($(window).width() <= 991){
-        lbd.initLeftMenu();
-    }
-});
-
 lbd = {
     misc:{
         navbar_menu_visible: 0
@@ -58,46 +46,6 @@ lbd = {
             $sidebar.append(sidebar_container);
         }
     },
-    initLeftMenu: function(){
-         if(!navbar_initialized){
-
-             $toggle = $('.navbar-toggle');
-
-             $toggle.click(function (){
-                console.log("click");
-                $('#sidebar').css('display', 'visible');
-                if(lbd.misc.navbar_menu_visible == 1) {
-                    //$('html').removeClass('nav-open');
-                    lbd.misc.navbar_menu_visible = 0;
-                    //$('#bodyClick').remove();
-                    // setTimeout(function(){
-                    //    $toggle.removeClass('toggled');
-                    // }, 400);
-
-                } else {
-                    //setTimeout(function(){
-                    //    $toggle.addClass('toggled');
-                    //}, 430);
-
-                    //div = '<div id="bodyClick"></div>';
-                    //$(div).appendTo("body").click(function() {
-                    //    $('html').removeClass('nav-open');
-                    //    lbd.misc.navbar_menu_visible = 0;
-                    //    $('#bodyClick').remove();
-                    //     setTimeout(function(){
-                    //        $toggle.removeClass('toggled');
-                    //     }, 400);
-                    //});
-
-                    //$('html').addClass('nav-open');
-                    lbd.misc.navbar_menu_visible = 1;
-
-                }
-            });
-            navbar_initialized = true;
-        }
-
-    }
 }
 
 

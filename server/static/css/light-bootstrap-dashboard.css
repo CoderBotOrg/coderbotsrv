@@ -2805,11 +2805,40 @@ body > .navbar-collapse[data-color="purple"]:after {
 /*          Changes for small display      */
 @media (max-width: 991px) {
   .sidebar {
+    width: 80px;
+  }
+
+  .sidebar img {
+    width: 50px;
+  }
+
+  .sidebar .nav p {
+    visibility: hidden;
+    width: 0px;
+    height: 30px;
+  }
+
+  .sidebar .nav li > a {
+    padding-left: 10px;
+  }
+
+  .gitkit-account-chip-name {
     display: none;
   }
 
+  .gitkit-account-chip-email {
+    display: none;
+  }
+
+  .gitkit-account-chip-photo {
+    border-radius: 50%;
+  }
+  .gitkit-user-card {
+    width: auto;
+  }
+
   .main-panel {
-    width: 100%;
+    width: calc(100% - 80px);
   }
 
   .navbar-transparent {

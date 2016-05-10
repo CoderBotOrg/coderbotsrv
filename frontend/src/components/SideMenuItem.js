@@ -10,7 +10,7 @@ export default React.createClass({
   render () {
     return (
       <li activeClassName='active'>
-        <Link {...this.props}>
+        <Link {...this.props} title={this.props.destLabel}>
           <i className={this.props.iconClassName}></i>
           <p>{this.props.destLabel}</p>
         </Link>
