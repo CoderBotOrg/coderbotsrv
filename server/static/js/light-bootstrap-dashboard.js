@@ -11,6 +11,7 @@ $(document).ready(function(){
 
     // check if there is an image set for the sidebar's background
     lbd.checkSidebarImage();
+    alert("pippo");
 
     //  Activate the tooltips
     $('[rel="tooltip"]').tooltip();

@@ -238,7 +238,6 @@ input:focus {
   display: block;
   top: 0;
   left: 0;
-  background-image: url('/static/img/sidebar-1.jpg');
   background-size: cover;
   background-position: center center;
 }
@@ -2805,49 +2804,11 @@ body > .navbar-collapse[data-color="purple"]:after {
 /*          Changes for small display      */
 @media (max-width: 991px) {
   .sidebar {
-    width: 80px;
-  }
-
-  .sidebar img {
-    width: 50px;
-  }
-
-  .sidebar .nav p {
-    visibility: hidden;
-    width: 0px;
-    height: 30px;
-  }
-
-  .sidebar .nav li > a {
-    padding-left: 10px;
-  }
-
-  .gitkit-account-chip {
-    width: 62px;
-  }
-
-  .gitkit-account-chip-name {
     display: none;
-  }
-
-  .gitkit-user-card-menu {
-    position: relative;
-    left: -100px;
-  }
-
-  .gitkit-account-chip-email {
-    display: none;
-  }
-
-  .gitkit-account-chip-photo {
-    border-radius: 50%;
-  }
-  .gitkit-user-card {
-    width: auto;
   }
 
   .main-panel {
-    width: calc(100% - 80px);
+    width: 100%;
   }
 
   .navbar-transparent {
@@ -2888,7 +2849,7 @@ body > .navbar-collapse[data-color="purple"]:after {
   .navbar .navbar-collapse.collapse,
   .navbar .navbar-collapse.collapse.in,
   .navbar .navbar-collapse.collapsing {
-    #display: none !important;
+    display: none !important;
   }
 
   .navbar-nav > li {
@@ -3382,7 +3343,7 @@ body > .navbar-collapse[data-color="purple"]:after {
   }
 
   .navbar-header .collapse, .navbar-toggle {
-    display: none !important;
+    display: block !important;
   }
 
   .navbar-header {
@@ -3429,8 +3390,4 @@ body > .navbar-collapse[data-color="purple"]:after {
     -ms-overflow-style: -ms-autohiding-scrollbar;
     -webkit-overflow-scrolling: touch;
   }
-}
-
-.collapse {
-  display: block;
 }

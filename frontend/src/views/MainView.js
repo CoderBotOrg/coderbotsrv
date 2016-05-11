@@ -18,6 +18,7 @@ export default React.createClass({
           <SideMenuItem to='/bots' destLabel='My CoderBot(s)' iconClassName='pe-7s-plugin'/>
           <SideMenuItem to='/programs' destLabel='My Programs' iconClassName='pe-7s-drawer'/>
           <SideMenuItem to='/library' destLabel='Public Programs' iconClassName='pe-7s-cloud'/>
+          <div id='gitkit'></div>
         </SideNav>
         <div className='main-panel'>
           <Header/>
