@@ -1,3 +1,4 @@
+"use strict";
 var searchVisible = 0;
 var transparent = true;
 
@@ -7,11 +8,10 @@ var fixedTop = false;
 var navbar_initialized = false;
 
 $(document).ready(function(){
-    window_width = $(window).width();
+    var window_width = $(window).width();
 
     // check if there is an image set for the sidebar's background
     lbd.checkSidebarImage();
-    alert("pippo");
 
     //  Activate the tooltips
     $('[rel="tooltip"]').tooltip();
@@ -33,20 +33,20 @@ $(document).ready(function(){
 
 });
 
-lbd = {
+var lbd = {
     misc:{
         navbar_menu_visible: 0
     },
 
     checkSidebarImage: function(){
-        $sidebar = $('.sidebar');
-        image_src = $sidebar.data('image');
-
+        var $sidebar = $('.sidebar');
+        var image_src = $sidebar.data('image');
+        console.log(image_src);
         if(image_src !== undefined){
-            sidebar_container = '<div class="sidebar-background" style="background-image: url(' + image_src + ') "/>'
+            var sidebar_container = '<div class="sidebar-background" style="background-image: url(' + image_src + ') "/>'
             $sidebar.append(sidebar_container);
         }
-    },
+    }
 }
 
 

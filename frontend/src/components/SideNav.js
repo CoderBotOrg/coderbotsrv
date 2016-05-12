@@ -22,5 +22,6 @@ export default React.createClass({
             {this.props.children}
           </ul>
         </div>
+        <div className='sidebar-background'/>
       </div>) }
 })

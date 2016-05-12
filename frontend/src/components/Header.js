@@ -22,7 +22,7 @@ export default React.createClass({
     return (
       <nav className='navbar navbar-default navbar-fixed'>
         <div className='container-fluid'>
-          <div className='navbar-header navbar-left'>
+          <div className='navbar-header navbar-right'>
             <button type='button' className='navbar-toggle' data-toggle='collapse' data-target='#sidebar'>
               <span className='sr-only'>Toggle navigation</span>
               <span className='icon-bar'></span>
@@ -30,13 +30,6 @@ export default React.createClass({
               <span className='icon-bar'></span>
             </button>
             <Title/>
-          </div>
-          <div className='collapse navbar-collapse'>
-            <ul className='nav navbar-nav navbar-right'>
-              <li>
-
-              </li>
-            </ul>
           </div>
         </div>
       </nav>) }

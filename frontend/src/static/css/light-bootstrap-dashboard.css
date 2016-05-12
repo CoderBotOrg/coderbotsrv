@@ -216,7 +216,7 @@ input:focus {
   left: 0;
   width: 260px;
   display: block;
-  z-index: 1;
+  z-index: 3;
   color: #fff;
   font-weight: 200;
   background-size: cover;
@@ -3390,4 +3390,8 @@ body > .navbar-collapse[data-color="purple"]:after {
     -ms-overflow-style: -ms-autohiding-scrollbar;
     -webkit-overflow-scrolling: touch;
   }
+}
+
+.sidebar-background {
+  background-image: url('/static/img/sidebar-1.jpg')
 }
