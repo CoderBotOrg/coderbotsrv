@@ -145,3 +145,33 @@ ul.list-social-icon-size {
 		width: 79px;
 	}
 }
+
+.gitkit-account-chip {
+  background: transparent;
+  color: #fff;
+  border: none;
+}
+.gitkit-account-chip-email {
+  color: #fff;
+}
+
+.gitkit-account-chip-photo {
+  left: 22px;
+  border-radius: 50%;
+}
+
+.gitkit-account-chip-name, .gitkit-account-chip-email, .gitkit-account-chip-email-only {
+  margin-left: 62px;
+}
+
+.gitkit-user-card-menuitem {
+  border: none;
+  color: #fff;
+  background: transparent;
+  margin-left: 62px;
+}
+
+.gitkit-user-card-menuitem:hover {
+  background: rgba(255, 255, 255, 0.13);
+  opacity: 1;
+}
