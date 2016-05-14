@@ -102,11 +102,11 @@ export default React.createClass({
             <div id='blocklyToolbox' className='hidden'></div>
           </div>
           <div className='footer'>
-            <div className='input-group'>
+            <div className='form-group'>
               <input type='text' className='form-control' name='tags' value={this.state.program_data.tags}
                 placeholder='tags, ...' onChange={this.handleTags}/>
             </div>
-            <div className='input-group'>
+            <div className='form-group'>
               <button className={pubButtonClass} onClick={this.handleSetPublic}>Set as Public</button>
               <button className={priButtonClass} onClick={this.handleSetPrivate}>Set as Private</button>
               <button className='btn btn-primary' onClick={this.handleSave}>Save</button>
