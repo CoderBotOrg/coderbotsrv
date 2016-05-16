@@ -95,8 +95,8 @@ class BotHandler(BaseHandler):
         logging.error("bot not present ")
         raise ValueError()
 
-      if data.get("local_ip"):
-        bot.local_ip = data.get("local_ip")
+      if data.get("bot_ip"):
+        bot.local_ip = data.get("bot_ip")
       if data.get("bot_name"):
         bot.name = data.get("bot_name")
       if data.get("bot_version"):
@@ -224,8 +224,6 @@ class UserBotListHandler(BaseHandler):
       bot_list = []
       for bot in bots:
         bot_list.append(bot.as_dict())
-      #logging.info(str(bot_list))
-      logging.info("bot: " + str(bot_list))
 
       retval = {"status": "ok", "bot_list": bot_list}
     except Exception as e:
