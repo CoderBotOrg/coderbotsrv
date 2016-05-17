@@ -389,6 +389,11 @@ class UserProgramHandler(BaseHandler):
       retval = {"status": "ko", "retcode": "program_not_found"}
     self.response.write( json.dumps(retval) )
 
+class HelloHandler(BaseHandler):
+  @cors_enabled
+  def get(self):
+    retval = {"status": "ok"}
+    self.response.write( json.dumps(retval) )
 
 app = webapp2.WSGIApplication([
     ('/api/coderbot/1.0/bot/(.*)/programs/(.*)', BotProgramHandler),
@@ -400,5 +405,6 @@ app = webapp2.WSGIApplication([
     ('/api/coderbot/1.0/user/programs/(.*)', UserProgramHandler),
     ('/api/coderbot/1.0/user/bots', UserBotListHandler),
     ('/api/coderbot/1.0/user/bots/(.*)', UserBotHandler),
-    ('/api/coderbot/1.0/user', UserHandler)
+    ('/api/coderbot/1.0/user', UserHandler),
+    ('/api/coderbot/1.0/', HelloHandler)
 ], debug=True)
